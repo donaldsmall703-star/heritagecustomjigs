@@ -1,0 +1,510 @@
+<!doctype html><html dir="auto"><head><meta http-equiv="Content-Security-Policy" content="default-src 'unsafe-inline' 'unsafe-eval' https: data: blob:; connect-src 'none'; form-action 'none'; base-uri 'none'">
+<script id="__base44_dark_class__">document.documentElement.classList.remove('dark');</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Wix+Madefor+Text:wght@400;500;600;700&display=swap">
+<style id="__base44_editor_theme__">
+:root {
+  --background: 38 27% 94%;
+  --foreground: 0 0% 4%;
+  --card: 0 0% 100%;
+  --card-foreground: 0 0% 4%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 0 0% 4%;
+  --primary: 21 42% 55%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 0 0% 96%;
+  --secondary-foreground: 0 0% 9%;
+  --muted: 39 17% 93%;
+  --muted-foreground: 0 0% 45%;
+  --accent: 0 0% 96%;
+  --accent-foreground: 0 0% 9%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 0 0% 98%;
+  --input: 0 0% 98%;
+  --ring: 21 42% 55%;
+  --radius: 0.5rem;
+  color-scheme: light;
+}
+.dark {
+  --background: 220 5% 11%;
+  --foreground: 0 0% 99%;
+  --card: 0 1% 14%;
+  --card-foreground: 0 0% 99%;
+  --popover: 0 1% 14%;
+  --popover-foreground: 0 0% 99%;
+  --primary: 21 42% 55%;
+  --primary-foreground: 0 0% 99%;
+  --secondary: 0 0% 18%;
+  --secondary-foreground: 0 0% 99%;
+  --muted: 0 0% 18%;
+  --muted-foreground: 0 0% 65%;
+  --accent: 0 0% 18%;
+  --accent-foreground: 0 0% 99%;
+  --destructive: 0 62% 30%;
+  --destructive-foreground: 0 0% 99%;
+  --border: 0 0% 16%;
+  --input: 0 0% 16%;
+  --ring: 21 42% 55%;
+  color-scheme: dark;
+}
+*, *::before, *::after { box-sizing: border-box; }
+/* shadcn's base layer: default every element's border-color to the theme
+   token. Without this, Tailwind's bare `border` utility only sets width and
+   the color falls back to currentColor (near-black text) — so the model's
+   `border` cards render heavy/dark and the `--border` value is ignored.
+   Explicit `border-{color}` utilities and inline styles still override. */
+*, *::before, *::after { border-color: hsl(var(--border)); }
+html, body {
+  margin: 0 !important;
+  padding: 0;
+  overflow: auto !important;
+  /* Inline card: transparent, so the real chat surface (a gradient, not the
+     single flat `--background` stop) shows straight through and the artifact
+     reads as inline chat content in both themes. Standalone saved file: opaque
+     `--background` so it stays readable on its own page. `--card` stays
+     elevated for emphasis blocks (stat tiles, panels) so hierarchy reads. */
+  background: hsl(var(--background)) !important;
+  color: hsl(var(--foreground));
+  font-family: 'WixMadeforText', 'Wix Madefor Text', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+/* 8px (vs 16px) — minimal breathing room from the iframe edge so
+   tightly-composed dashboards don't ship a fat empty halo at the top
+   before their first element. LLMs add their own inner spacing. */
+body { padding: 8px; }
+code, kbd, pre, samp { font-family: 'WixMadeforMonospace', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+a { color: hsl(var(--primary)); }
+hr { border: 0; border-top: 1px solid hsl(var(--border)); }
+h1, h2, h3, h4, h5, h6 { font-weight: 600; color: hsl(var(--foreground)); }
+</style>
+<script id="__base44_tw_config__">
+window.tailwind = window.tailwind || {};
+window.tailwind.config = {
+  darkMode: 'class',
+  theme: {
+    extend: {
+      colors: {
+        border: 'hsl(var(--border))',
+        input: 'hsl(var(--input))',
+        ring: 'hsl(var(--ring))',
+        background: 'hsl(var(--background))',
+        foreground: 'hsl(var(--foreground))',
+        primary: { DEFAULT: 'hsl(var(--primary))', foreground: 'hsl(var(--primary-foreground))' },
+        secondary: { DEFAULT: 'hsl(var(--secondary))', foreground: 'hsl(var(--secondary-foreground))' },
+        destructive: { DEFAULT: 'hsl(var(--destructive))', foreground: 'hsl(var(--destructive-foreground))' },
+        muted: { DEFAULT: 'hsl(var(--muted))', foreground: 'hsl(var(--muted-foreground))' },
+        accent: { DEFAULT: 'hsl(var(--accent))', foreground: 'hsl(var(--accent-foreground))' },
+        popover: { DEFAULT: 'hsl(var(--popover))', foreground: 'hsl(var(--popover-foreground))' },
+        card: { DEFAULT: 'hsl(var(--card))', foreground: 'hsl(var(--card-foreground))' },
+      },
+      // A bare `border` / `divide-*` (no color) falls back to Tailwind
+      // preflight's DEFAULT, which is a FIXED gray-200 (#e5e7eb) — subtle on the
+      // light card but near-white glare on the dark card. The `colors.border`
+      // map above only creates the `border-border` class; it does NOT set the
+      // uncolored default. Point the DEFAULT at the theme token so an uncolored
+      // border adapts to dark mode like the rest of the palette. (Explicit
+      // `border-primary` etc. still override.)
+      borderColor: { DEFAULT: 'hsl(var(--border))' },
+      divideColor: { DEFAULT: 'hsl(var(--border))' },
+      borderRadius: {
+        lg: 'var(--radius)',
+        md: 'calc(var(--radius) - 2px)',
+        sm: 'calc(var(--radius) - 4px)',
+      },
+      fontFamily: {
+        // Same two-name stack as `FONT_SANS_STACK` above. The
+        // sandboxed null-origin iframe lands on `Wix Madefor Text`
+        // (Google Fonts' name); `WixMadeforText` is here only for
+        // defense-in-depth in case the iframe ever runs same-origin.
+        sans: ['WixMadeforText', 'Wix Madefor Text', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
+        mono: ['WixMadeforMonospace', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace'],
+      },
+    },
+  },
+};
+</script>
+<script src="https://cdn.tailwindcss.com" id="__base44_tw_cdn__"></script></head><body><!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Heritage Custom Jigs</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Georgia', serif; background: #0a1628; color: #e8e0d0; }
+
+  /* NAV */
+  nav {
+    background: #0d1f3c;
+    border-bottom: 2px solid #c8a84b;
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-logo { font-size: 1.3rem; font-weight: bold; color: #c8a84b; letter-spacing: 1px; }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a { color: #c8d8f0; text-decoration: none; font-size: 0.95rem; letter-spacing: 0.5px; }
+  .nav-links a:hover { color: #c8a84b; }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #0a1628 0%, #0d2a50 50%, #0a1628 100%);
+    padding: 5rem 2rem 4rem;
+    text-align: center;
+    border-bottom: 1px solid #1e3a5f;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(ellipse at center, rgba(200,168,75,0.08) 0%, transparent 70%);
+  }
+  .hero-badge {
+    display: inline-block;
+    background: rgba(200,168,75,0.15);
+    border: 1px solid #c8a84b;
+    color: #c8a84b;
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 0.4rem 1.2rem;
+    border-radius: 20px;
+    margin-bottom: 1.5rem;
+  }
+  .hero h1 {
+    font-size: clamp(2.2rem, 6vw, 3.8rem);
+    color: #ffffff;
+    line-height: 1.15;
+    margin-bottom: 1rem;
+    text-shadow: 0 2px 20px rgba(0,0,0,0.5);
+  }
+  .hero h1 span { color: #c8a84b; }
+  .hero p {
+    font-size: 1.15rem;
+    color: #9bb5d4;
+    max-width: 560px;
+    margin: 0 auto 2rem;
+    line-height: 1.7;
+  }
+  .hero-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+  .btn-primary {
+    background: #c8a84b;
+    color: #0a1628;
+    padding: 0.85rem 2rem;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    letter-spacing: 0.5px;
+  }
+  .btn-outline {
+    background: transparent;
+    color: #c8a84b;
+    padding: 0.85rem 2rem;
+    border: 2px solid #c8a84b;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    text-decoration: none;
+    letter-spacing: 0.5px;
+  }
+
+  /* SECTION WRAPPER */
+  section { padding: 4rem 2rem; max-width: 1100px; margin: 0 auto; }
+  .section-label {
+    text-align: center;
+    color: #c8a84b;
+    font-size: 0.8rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+  .section-title {
+    text-align: center;
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    color: #ffffff;
+    margin-bottom: 0.75rem;
+  }
+  .section-sub {
+    text-align: center;
+    color: #7a9cbf;
+    font-size: 1rem;
+    max-width: 520px;
+    margin: 0 auto 3rem;
+    line-height: 1.6;
+  }
+  .divider { width: 60px; height: 3px; background: #c8a84b; margin: 1rem auto 2rem; border-radius: 2px; }
+
+  /* GALLERY */
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.25rem;
+  }
+  .gallery-card {
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #1e3a5f;
+    background: #0d1f3c;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .gallery-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(200,168,75,0.15);
+  }
+  .gallery-card img {
+    width: 100%;
+    height: 280px;
+    object-fit: cover;
+    display: block;
+  }
+  .gallery-card-label {
+    padding: 0.75rem 1rem;
+    font-size: 0.85rem;
+    color: #9bb5d4;
+    border-top: 1px solid #1e3a5f;
+    text-align: center;
+  }
+
+  /* ABOUT */
+  .about-wrap {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: center;
+  }
+  @media (max-width: 700px) { .about-wrap { grid-template-columns: 1fr; } }
+  .about-text h2 { font-size: 1.9rem; color: #fff; margin-bottom: 1rem; }
+  .about-text p { color: #9bb5d4; line-height: 1.8; margin-bottom: 1rem; font-size: 0.98rem; }
+  .about-feature {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin-bottom: 0.85rem;
+  }
+  .about-feature-icon {
+    width: 36px;
+    height: 36px;
+    background: rgba(200,168,75,0.15);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 1rem;
+  }
+  .about-feature-text strong { color: #c8a84b; display: block; font-size: 0.9rem; }
+  .about-feature-text span { color: #7a9cbf; font-size: 0.85rem; }
+  .about-img-wrap { position: relative; }
+  .about-img-wrap img { width: 100%; border-radius: 8px; border: 2px solid #1e3a5f; }
+
+  /* STATS */
+  .stats-bar {
+    background: #0d1f3c;
+    border-top: 1px solid #1e3a5f;
+    border-bottom: 1px solid #1e3a5f;
+    padding: 2.5rem 2rem;
+  }
+  .stats-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    text-align: center;
+  }
+  @media (max-width: 600px) { .stats-inner { grid-template-columns: 1fr; } }
+  .stat-num { font-size: 2.2rem; font-weight: bold; color: #c8a84b; }
+  .stat-label { color: #7a9cbf; font-size: 0.85rem; margin-top: 0.25rem; }
+
+  /* CONTACT */
+  .contact-section { background: #0d1f3c; border-top: 1px solid #1e3a5f; border-bottom: 1px solid #1e3a5f; }
+  .contact-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 2rem;
+  }
+  .contact-card {
+    background: #0a1628;
+    border: 1px solid #1e3a5f;
+    border-radius: 8px;
+    padding: 1.75rem;
+    text-align: center;
+  }
+  .contact-icon { font-size: 1.8rem; margin-bottom: 0.75rem; }
+  .contact-card h3 { color: #c8a84b; font-size: 0.85rem; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 0.5rem; }
+  .contact-card p { color: #9bb5d4; font-size: 0.95rem; line-height: 1.6; }
+  .contact-card a { color: #9bb5d4; text-decoration: none; }
+  .contact-card a:hover { color: #c8a84b; }
+
+  /* FOOTER */
+  footer {
+    background: #060e1c;
+    border-top: 2px solid #c8a84b;
+    padding: 2rem;
+    text-align: center;
+    color: #3a5a7a;
+    font-size: 0.85rem;
+  }
+  footer span { color: #c8a84b; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Heritage Custom Jigs</div>
+  <ul class="nav-links">
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">Handcrafted in Nags Head, NC</div>
+  <h1>Custom Bucktail Jigs<br/>Built for <span>Cobia</span></h1>
+  <p>Hand-tied, hand-painted jigs crafted right here on the Outer Banks — designed to catch the fish of a lifetime.</p>
+  <div class="hero-btns">
+    <a href="#gallery" class="btn-primary">See the Jigs</a>
+    <a href="#contact" class="btn-outline">Order Now</a>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div>
+      <div class="stat-num">100%</div>
+      <div class="stat-label">Hand-Tied & Hand-Painted</div>
+    </div>
+    <div>
+      <div class="stat-num">OBX</div>
+      <div class="stat-label">Made in Nags Head, NC</div>
+    </div>
+    <div>
+      <div class="stat-num">Custom</div>
+      <div class="stat-label">Colors & Sizes Available</div>
+    </div>
+  </div>
+</div>
+
+<!-- GALLERY -->
+<section id="gallery">
+  <div class="section-label">The Work</div>
+  <h2 class="section-title">Our Jigs</h2>
+  <div class="divider"></div>
+  <p class="section-sub">Every jig is hand-crafted to order. These are real examples of what we make — built to catch cobia and more.</p>
+  <div class="gallery-grid">
+    <div class="gallery-card">
+      <img src="https://media.base44.com/images/public/6a5f7d5bd38e1a561d9967ed/4d81fe100_IMG_0618.jpg" alt="White Bucktail Jig" />
+      <div class="gallery-card-label">White Silver — Classic Cobia Setup</div>
+    </div>
+    <div class="gallery-card">
+      <img src="https://media.base44.com/images/public/6a5f7d5bd38e1a561d9967ed/168574dc8_IMG_0619.jpg" alt="Green White Bucktail Jig" />
+      <div class="gallery-card-label">White Green — Chartreuse Fleck</div>
+    </div>
+    <div class="gallery-card">
+      <img src="https://media.base44.com/images/public/6a5f7d5bd38e1a561d9967ed/7dde2ab00_IMG_0610.JPG" alt="Full Jig Collection" />
+      <div class="gallery-card-label">Full Collection — Orange & White Mix</div>
+    </div>
+    <div class="gallery-card">
+      <img src="https://media.base44.com/images/public/6a5f7d5bd38e1a561d9967ed/4d677f974_IMG_0612.jpg" alt="Orange Bucktail Jig" />
+      <div class="gallery-card-label">Orange Fire — Gold Flash Tail</div>
+    </div>
+    <div class="gallery-card">
+      <img src="https://media.base44.com/images/public/6a5f7d5bd38e1a561d9967ed/c8b8463ec_IMG_0613.jpg" alt="White Orange Jig" />
+      <div class="gallery-card-label">White Orange — Articulated Style</div>
+    </div>
+    <div class="gallery-card">
+      <img src="https://media.base44.com/images/public/6a5f7d5bd38e1a561d9967ed/fba4c99e1_IMG_0616.jpg" alt="Orange Jig Wide Gap Hook" />
+      <div class="gallery-card-label">Orange Crush — Wide Gap Hook</div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-wrap">
+    <div class="about-text">
+      <div class="section-label" style="text-align:left">Our Story</div>
+      <h2>Tied by Hand.<br/>Proven on the Water.</h2>
+      <div class="divider" style="margin-left:0"></div>
+      <p>Heritage Custom Jigs was born out of a passion for fishing the Outer Banks. Every jig is hand-tied and hand-painted right here in Nags Head, NC — built to perform in real conditions on real fish.</p>
+      <p>We specialize in bucktail jigs for cobia, but our custom colors work on a wide variety of inshore and offshore species up and down the coast.</p>
+      <div class="about-feature">
+        <div class="about-feature-icon">🎣</div>
+        <div class="about-feature-text">
+          <strong>Cobia Specialists</strong>
+          <span>Weights, colors, and profiles tuned for cobia fishing on the OBX</span>
+        </div>
+      </div>
+      <div class="about-feature">
+        <div class="about-feature-icon">🎨</div>
+        <div class="about-feature-text">
+          <strong>Fully Custom Orders</strong>
+          <span>Pick your color, size, and flash — we build it to spec</span>
+        </div>
+      </div>
+      <div class="about-feature">
+        <div class="about-feature-icon">📍</div>
+        <div class="about-feature-text">
+          <strong>Outer Banks Made</strong>
+          <span>Proudly handcrafted in Nags Head, North Carolina</span>
+        </div>
+      </div>
+    </div>
+    <div class="about-img-wrap">
+      <img src="https://media.base44.com/images/public/6a5f7d5bd38e1a561d9967ed/7dde2ab00_IMG_0610.JPG" alt="Jig Collection" />
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<div class="contact-section">
+  <section id="contact">
+    <div class="section-label">Get In Touch</div>
+    <h2 class="section-title">Order Your Jigs</h2>
+    <div class="divider"></div>
+    <p class="section-sub">Ready to fish? Give us a call or reach out to place a custom order.</p>
+    <div class="contact-grid">
+      <div class="contact-card">
+        <div class="contact-icon">📞</div>
+        <h3>Phone</h3>
+        <p><a href="tel:2524893610">(252) 489-3610</a></p>
+      </div>
+      <div class="contact-card">
+        <div class="contact-icon">📍</div>
+        <h3>Location</h3>
+        <p>Nags Head, NC<br/>Outer Banks</p>
+      </div>
+      <div class="contact-card">
+        <div class="contact-icon">🐟</div>
+        <h3>Speciality</h3>
+        <p>Custom Bucktail Jigs<br/>Cobia & Inshore</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p>&copy; 2026 <span>Heritage Custom Jigs</span> · Nags Head, NC · All jigs handcrafted with care</p>
+</footer>
+
+</body>
+</html>
+<script id="__base44_dark_class_post__">document.documentElement.classList.remove('dark');</script></body></html>
